@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Memory Matching Game</title>
+	<style>
+		body {
+			background-color: #f2f2f2;
+		}
+
+		h1 {
+			text-align: center;
+			margin-top: 50px;
+		}
+
+		.container {
+			margin: 0 auto;
+			width: 600px;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+		}
+
+		.card {
+			width: 100px;
+			height: 100px;
+			margin-top: 20px;
+			background-color: white;
+			border-radius: 10px;
+			box-shadow: 1px 1px 10px rgba(0,0,0,0.3);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 50px;
+			cursor: pointer;
+			transition: all 0.3s ease-in-out;
+		}
+
+		.card:hover {
+			transform: scale(1.1);
+			box-shadow: 1px 1px 20px rgba(0,0,0,0.5);
+		}
+
+		.card.open {
+			background-color: #3b3b3b;
+			color: white;
+		}
+
+		.time {
+			text-align: center;
+			font-size: 30px;
+			margin-top: 20px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Memory Matching Game</h1>
+	<div class="container"></div>
+	<div class="time"></div>
+
+	<script>
+		const cards = ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🦁", "🐯", "🐴", "🦄"];
+		const container = document.querySelector('.container');
+		const time = document.querySelector('.time');
+		let openedCards = [];
+		let matchedCards = [];
+		let isFlipped = false;
+		let firstCard, secondCard;
+		let countDown = 60;
+
+		function shuffleCards() {
+			cards.sort(() => Math.random() - 0.5);
+		}
+
+		function createCards() {
+			shuffleCards();
+			for (let i = 0; i < cards.length; i++) {
+				const card = document.createElement('div');
+				card.classList.add('card');
+				card.setAttribute('data-id', i);
+				card.innerHTML = `<span>${cards[i]}</span>`;
+				card.addEventListener('click', flipCard);
+				container.appendChild(card);
+			}
+		}
+
+		function flipCard() {
+			if (isFlipped) return;
+			this.classList.add('open');
+			if (!openedCards.includes(this)) openedCards.push(this);
+			if (openedCards.length === 2) {
+				firstCard = openedCards[0];
+				secondCard = openedCards[1];
+				checkMatch();
+			}
+		}
+
+		function checkMatch() {
+			isFlipped = true;
+			if (firstCard.dataset.id === secondCard.dataset.id) {
+				matchedCards.push(firstCard, secondCard);
+				setTimeout(() => {
+					first
